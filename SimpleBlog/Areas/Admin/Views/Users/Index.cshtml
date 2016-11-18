@@ -1,0 +1,45 @@
+﻿@model SimpleBlog.Areas.Admin.ViewModels.UsersIndex
+@{
+    ViewBag.Title = "Index";
+}
+<div class="btn-toolbar">
+    <a href="@Url.Action("NewUser")" class="btn btn-primary btn-sm"><i class="glyphicon glyphicon-plus"></i>Create User</a>
+</div>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Roles</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model.Users)
+        {
+            <tr>
+                <td>@user.Id</td>
+                <td>@user.UserName</td>
+                <td>@user.Email</td>
+                <td></td>
+                <td>
+                    <div class="btn-group">
+                        <a href="@Url.Action("EditUser",new {id=user.Id})" class="btn btn-xs btn-primary">
+                            <i class="glyphicon glyphicon-edit"></i>
+                            Edit
+                        </a>
+                        <a href="@Url.Action("ResetPassword", new {id = user.Id})" c class="btn btn-xs btn-default">
+                            <i class="glyphicon glyphicon-lock"></i>
+                            Reset password
+                        </a>                       
+                        <a href="@Url.Action("DeleteUser",new {id = user.Id})" class="btn btn-xs btn-danger" data-post="Are you sure want to delete @user.UserName">
+                            <i class="glyphicon glyphicon-remove"></i>
+                            Delete
+                        </a>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

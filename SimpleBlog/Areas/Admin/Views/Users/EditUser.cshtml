@@ -1,0 +1,21 @@
+﻿@model SimpleBlog.Areas.Admin.ViewModels.UsersEdid
+
+@{
+    ViewBag.Title = "EditUser";
+}
+<h3>Edit User @Model.Username</h3>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary()
+    <div class="form-group">
+        @Html.LabelFor(f => f.Username)
+        @Html.TextBoxFor(f => f.Username, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(f => f.Email)
+        @Html.TextBoxFor(f => f.Email, new { @class = "form-control", type = "email" })
+    </div>   
+    <input type="submit" value="Update User" class="btn btn-primary" />
+    <a href="@Url.Action("index")" class="btn btn-danger">Cancel</a>
+}

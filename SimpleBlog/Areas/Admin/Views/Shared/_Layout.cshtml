@@ -1,0 +1,60 @@
+﻿@using System.Web.Optimization
+@helper SelectedTabClass(string tabName)
+{
+if (tabName == ViewBag.SelectedTab)
+{
+        @:active
+    }
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Simaple Blog!</title>
+    @Styles.Render("~/admin/styles")
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @Html.ActionLink("Simaple Blog!", "Index", "Posts", new { area = "" }, new { @class = "navbar-brand" })
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav"></ul>
+                @Html.Partial("_LoginPartial")
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <ul class="nav nav-pills">
+            <li class="@SelectedTabClass("posts")">
+                @Html.ActionLink("Posts", "Index", "Posts", new { area = "admin" }, new { })
+            </li>
+            <li class="@SelectedTabClass("users")">
+                @Html.ActionLink("Users", "Index", "Users", new { area = "admin" }, new { })
+            </li>
+            <li class="pull-right">
+                @Html.RouteLink("Home", "Home", new { area = "" }, new { })
+            </li>
+        </ul>
+    </div>
+    <div class="container body-content">
+        @RenderBody()
+        <br />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - Simaple Blog!</p>
+        </footer>
+    </div>
+    @Scripts.Render("~/admin/scripts")
+    @RenderSection("scripts", required: false)
+    <form class="hidden" id="anti-forgery-from">
+        @Html.AntiForgeryToken()
+    </form>
+</body>
+</html>
