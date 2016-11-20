@@ -1,7 +1,7 @@
-﻿using System.Linq;
-using System.Web;
-using NHibernate.Linq;
+﻿using NHibernate.Linq;
 using SimpleBlog.Models;
+using System.Linq;
+using System.Web;
 
 namespace SimpleBlog
 {
@@ -17,7 +17,8 @@ namespace SimpleBlog
                 var user = HttpContext.Current.Items[UserKey] as User;
                 if (user == null)
                 {
-                    user = Database.Session.Query<User>().FirstOrDefault(u => u.UserName == HttpContext.Current.User.Identity.Name);
+                    var users = Database.Session.Query<User>().ToList();
+                    user = users.FirstOrDefault(u => u.UserName == HttpContext.Current.User.Identity.Name);
                     if (user == null)
                         return null;
                     HttpContext.Current.Items[UserKey] = user;

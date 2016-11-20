@@ -9,7 +9,7 @@ namespace SimpleBlog.Models
         public virtual string Name { get; set; }
     }
 
-    public class RoleMap : ClassMapping<Role>
+    public sealed class RoleMap : ClassMapping<Role>
     {
         public RoleMap()
         {

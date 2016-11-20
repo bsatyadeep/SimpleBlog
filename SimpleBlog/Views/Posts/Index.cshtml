@@ -1,5 +1,5 @@
-﻿
+﻿@model SimpleBlog.ViewModels.PostsIndex
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Posts";
 }
-<h2>Index</h2>
+@Html.Partial("_PostPartial",Model.Posts)

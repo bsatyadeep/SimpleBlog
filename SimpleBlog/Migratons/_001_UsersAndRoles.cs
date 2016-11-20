@@ -1,5 +1,5 @@
-﻿using System.Data;
-using FluentMigrator;
+﻿using FluentMigrator;
+using System.Data;
 
 namespace SimpleBlog.Migratons
 {
@@ -30,7 +30,6 @@ namespace SimpleBlog.Migratons
                 .WithColumn("name").AsCustom("VARCHAR(128)");
 
             Create.Table("role_users")
-                .WithColumn("id").AsInt32().Identity().PrimaryKey()
                 .WithColumn("user_id").AsInt32().ForeignKey("users", "id").OnDelete(Rule.Cascade)
                 .WithColumn("role_id").AsInt32().ForeignKey("roles", "id").OnDelete(Rule.Cascade);
         }

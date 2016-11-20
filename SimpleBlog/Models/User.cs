@@ -33,38 +33,28 @@ namespace SimpleBlog.Models
         }
     }
 
-    public class UserMap : ClassMapping<User>
+    public sealed class UserMap : ClassMapping<User>
     {
         public UserMap()
         {
             Table("users");
-            Id(x => x.Id, x =>
-            {
-                x.Generator(Generators.Identity);
-            });
-            Property(x => x.UserName, x =>
-            {
-                x.NotNullable(true);
-                x.Column("username");
-            });
-            Property(x => x.Email, x =>
-            {
-                x.NotNullable(true);
-                x.Column("email");
-            });
+            Id(x => x.Id, x => x.Generator(Generators.Identity));
+            Property(x => x.UserName, x => x.NotNullable(true));
+            Property(x => x.Email, x => x.NotNullable(true));
             Property(x => x.PasswordHash, x =>
             {
                 x.Column("password_hash");
                 x.NotNullable(true);
             });
-
             Bag(x => x.Roles, x =>
             {
                 x.Table("role_users");
-                x.Key(k => k.Column("user_id"));
-            },
-                x => x.ManyToMany(k => k.Column("role_id"))
-                );
+                x.Key(k =>
+                {
+                    k.Column("user_id");
+                    k.NotNullable(true);
+                });
+            }, x => x.ManyToMany(k => k.Column("role_id")));
         }
     }
 }

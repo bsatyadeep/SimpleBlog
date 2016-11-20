@@ -1,9 +1,10 @@
-﻿using System.Linq;
-using System.Web.Mvc;
-using NHibernate.Linq;
+﻿using NHibernate.Linq;
 using SimpleBlog.Areas.Admin.ViewModels;
 using SimpleBlog.Infrastructure;
 using SimpleBlog.Models;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web.Mvc;
 
 namespace SimpleBlog.Areas.Admin.Controllers
 {
@@ -21,11 +22,23 @@ namespace SimpleBlog.Areas.Admin.Controllers
 
         public ActionResult NewUser()
         {
-            return View(new UsersNew());
+            return View(new UsersNew
+            {
+                Roles = Database.Session.Query<Role>().Select(role => new RoleCheckBox
+                {
+                    Id = role.Id,
+                    IsChecked = false,
+                    Name = role.Name
+                }).ToList()
+            });
         }
         [HttpPost, ValidateAntiForgeryToken]
         public ActionResult NewUser(UsersNew form)
         {
+            var user = new User();
+            SyncRoles(form.Roles, user.Roles);
+
+
             var users = Database.Session.Query<User>().ToList();
             if (users.Any(i => i.UserName == form.Username))
             {
@@ -35,13 +48,16 @@ namespace SimpleBlog.Areas.Admin.Controllers
             {
                 return View(form);
             }
-            var user = new User
-            {
-                UserName = form.Username,
-                Email = form.Email
-            };
+            user.Email = form.Email;
+            user.UserName = form.Username;
+
+            //var user = new User
+            //{
+            //    UserName = form.Username,
+            //    Email = form.Email
+            //};
             user.Setpassword(form.Password);
-            Database.Session.Save(user, user.Id);
+            Database.Session.Save(user);
             return RedirectToAction("index");
         }
         public ActionResult EditUser(int id)
@@ -56,7 +72,13 @@ namespace SimpleBlog.Areas.Admin.Controllers
             return View(new UsersEdid
             {
                 Username = user.UserName,
-                Email = user.Email
+                Email = user.Email,
+                Roles = Database.Session.Query<Role>().Select(role => new RoleCheckBox
+                {
+                    Id = role.Id,
+                    IsChecked = user.Roles.Contains(role),
+                    Name = role.Name
+                }).ToList()
             });
         }
         [HttpPost, ValidateAntiForgeryToken]
@@ -67,6 +89,8 @@ namespace SimpleBlog.Areas.Admin.Controllers
             {
                 return HttpNotFound();
             }
+
+            SyncRoles(form.Roles, user.Roles);
             var users = Database.Session.Query<User>().ToList();
             if (users.Any(i => i.UserName == form.Username && i.Id != id))
             {
@@ -122,6 +146,29 @@ namespace SimpleBlog.Areas.Admin.Controllers
             }
             Database.Session.Delete(user);
             return RedirectToAction("index");
+        }
+
+        private void SyncRoles(IList<RoleCheckBox> checkBoxs, IList<Role> roles)
+        {
+            var selectedRoles = new List<Role>();
+            var dbroles = Database.Session.Query<Role>().ToList();
+            foreach (var role in dbroles)
+            {
+                var checkBox = checkBoxs.Single(i => i.Id == role.Id);
+                checkBox.Name = role.Name;
+                if (checkBox.IsChecked)
+                {
+                    selectedRoles.Add(role);
+                }
+            }
+            foreach (Role roleToAdd in selectedRoles.Where(r => !roles.Contains(r)))
+            {
+                roles.Add(roleToAdd);
+            }
+            foreach (Role roleToRemove in roles.Where(r => !selectedRoles.Contains(r)).ToList())
+            {
+                roles.Remove(roleToRemove);
+            }
         }
     }
 }

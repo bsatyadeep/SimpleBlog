@@ -1,0 +1,1 @@
+..\..\packages\FluentMigrator.1.6.2\tools\Migrate.exe -db=SqlServer2014 -a=..\bin\SimpleBlog.dll --configPath=..\Web.config -c=DefaultConnection

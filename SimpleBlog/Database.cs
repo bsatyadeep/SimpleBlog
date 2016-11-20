@@ -1,8 +1,8 @@
-﻿using System.Web;
-using NHibernate;
+﻿using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Mapping.ByCode;
 using SimpleBlog.Models;
+using System.Web;
 
 namespace SimpleBlog
 {
@@ -19,8 +19,11 @@ namespace SimpleBlog
             //add out mapping
             var mapper = new ModelMapper();
             mapper.AddMapping<UserMap>();
-            //mapper.AddMapping<RoleMap>();
-            //mapper.AddMapping<UserRoleMap>();
+            mapper.AddMapping<RoleMap>();
+
+            mapper.AddMapping<PostMap>();
+            mapper.AddMapping<TagMap>();
+
 
             config.AddMapping(mapper.CompileMappingForAllExplicitlyAddedEntities());
 
