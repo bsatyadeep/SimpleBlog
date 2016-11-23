@@ -11,14 +11,22 @@ namespace SimpleBlog.Controllers
 {
     public class PostsController : Controller
     {
-        private const int PostPerPage = 5;
+        private const int PostPerPage = 10;
         public ActionResult Index(int page = 1)
         {
             var baseQuery = Database.Session.Query<Post>()
+                .OrderByDescending(t => t.CreateedAt)
                 .Where(t => t.DeletedAt == null)
-                .OrderByDescending(t => t.CreateedAt).ToList();
+                .FetchMany(f => f.Tags)
+                .Fetch(f => f.User)
+                .ToList();
+
             var totalPostCount = baseQuery.Count;
-            var postIds = baseQuery.Skip((page - 1) * (PostPerPage)).Take(PostPerPage).Select(t => t.Id).ToList();
+            var postIds = baseQuery
+                .Skip((page - 1) * (PostPerPage))
+                .Take(PostPerPage)
+                .Select(t => t.Id).ToList();
+
             var posts = baseQuery.Where(t => postIds.Contains(t.Id)).ToList();
             return View(new PostsIndex
             {

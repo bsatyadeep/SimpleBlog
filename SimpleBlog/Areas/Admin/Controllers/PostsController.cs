@@ -17,12 +17,20 @@ namespace SimpleBlog.Areas.Admin.Controllers
         private const int PostsPerPage = 5;
         public ActionResult Index(int page = 1)
         {
-            var posts = Database.Session.Query<Post>().ToList();
-            var totalPostCount = posts.Count;
-            var currentPostPage = posts
-                .OrderByDescending(c => c.CreateedAt)
+            var baseQuery = Database.Session.Query<Post>().OrderByDescending(f => f.CreateedAt);
+            var totalPostCount = baseQuery.Count();
+
+            var postIds = baseQuery
                 .Skip((page - 1) * PostsPerPage)
-                .Take(PostsPerPage).ToList();
+                .Take(PostsPerPage)
+                .Select(p => p.Id)
+                .ToArray();
+
+            var currentPostPage = baseQuery
+                .Where(i => postIds.Contains(i.Id))
+                .FetchMany(f => f.Tags)
+                .Fetch(p => p.User)
+                .ToList();
 
             return View(new PostsIndex
             {
@@ -66,7 +74,8 @@ namespace SimpleBlog.Areas.Admin.Controllers
                 }).ToList()
             });
         }
-        [HttpPost, ValidateAntiForgeryToken, ValidateInput(false)]
+        //[HttpPost, ValidateAntiForgeryToken, ValidateInput(false)]
+        [HttpPost, ValidateAntiForgeryToken]
         public ActionResult Form(PostsForm form)
         {
             form.IsNew = form.PostId == null;

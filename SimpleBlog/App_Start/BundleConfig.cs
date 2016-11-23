@@ -27,8 +27,10 @@ namespace SimpleBlog
             bundles.Add(new ScriptBundle("~/scripts")
                 .Include(string.Format("~/Scripts/jquery-{0}.js", "3.1.1"))
                 .Include("~/Scripts/jquery.validate*")
+                .Include("~/Scripts/jquery.timeago.js")
                 .Include("~/Scripts/modernizr-*")
-                .Include("~/Scripts/bootstrap.js"));
+                .Include("~/Scripts/bootstrap.js")
+                .Include("~/Scripts/Frontend.js"));
 
             //bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
             //            "~/Scripts/jquery-{version}.js"));

@@ -169,7 +169,6 @@ a > img {
 
 .image-grayscale img, img.image-grayscale
 {
-	filter: grayscale(100%);
 }
 
 .embed-240p
