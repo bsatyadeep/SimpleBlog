@@ -434,6 +434,7 @@
     <Compile Include="Areas\Admin\ViewModels\UsersNew.cs" />
     <Compile Include="Auth.cs" />
     <Compile Include="Controllers\AuthController.cs" />
+    <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\LayoutController.cs" />
     <Compile Include="Controllers\PostsController.cs" />
     <Compile Include="Database.cs" />
@@ -475,6 +476,8 @@
     <Content Include="Views\Posts\Show.cshtml" />
     <Content Include="Views\Posts\Tag.cshtml" />
     <Content Include="Views\Layout\Sidebar.cshtml" />
+    <Content Include="Views\Error\NotFound.cshtml" />
+    <Content Include="Views\Error\Error.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
