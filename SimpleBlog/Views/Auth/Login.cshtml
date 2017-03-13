@@ -4,17 +4,23 @@
 }
 @using (Html.BeginForm())
 {
-    @Html.AntiForgeryToken()
-    @Html.ValidationSummary()
-    <div class="form-group">
-        @Html.LabelFor(modelItem => Model.UserName,new { @class = "label-control" })
-        @Html.TextBoxFor(modelItem => Model.UserName, new { @class = "form-control" })
-    </div>
-    <div>
-        @Html.LabelFor(modelItem => Model.Password, new { @class = "label-control" })
-        @Html.PasswordFor(modelItem => Model.Password, new { @class = "form-control" })
-    </div>
-    <div>
-        <input type="submit" value="Login" class="btn btn-default btn-primary" />
+    <div class="row">
+        <div class="col-lg-4">
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary()
+            <div class="form-group">
+                @Html.LabelFor(modelItem => Model.UserName, new { @class = "label-control" })
+                @Html.TextBoxFor(modelItem => Model.UserName, new { @class = "form-control" })
+                @Html.ValidationMessageFor(modelItem=>Model.UserName,"",new {@class="text-danger"})
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(modelItem => Model.Password, new { @class = "label-control" })                
+                @Html.PasswordFor(modelItem => Model.Password, new { @class = "form-control" })
+                @Html.ValidationMessageFor(modelItem => Model.Password, "", new { @class = "text-danger" })
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Login" class="btn btn-default btn-primary" />
+            </div>
+        </div>
     </div>
 }
